@@ -1,0 +1,288 @@
+﻿@using LyroundMVCIntegrationMert.ViewModels
+@using LyroundMVCIntegrationMert.Models.Managers
+@using LyroundMVCIntegrationMert.Models
+@model SarkiEkleViewModel
+@{
+    ViewBag.Title = "SarkiyaEklemeIslemiYap";
+    Layout = "~/Views/Shared/LayoutPageAnaSayfa.cshtml";
+}
+
+
+<style>
+    .mustafa {
+        height: 95vh;
+    }
+
+    .lyrics-ortala {
+        text-align: center;
+    }
+
+    .hr-class {
+        visibility: hidden;
+        margin-bottom: -19px;
+    }
+
+    .ortalama {
+        text-align: center;
+    }
+
+    .hepsiniortala {
+        width: 45%;
+    }
+
+    .saveclass {
+        width: 100%;
+    }
+</style>
+<section class="hbox stretch">
+
+    <section>
+
+        <section class="vbox">
+            <section class="scrollable wrapper-lg mustafa">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="panel wrapper-lg">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <img src="@Model.SarkiResimler.SarkiResimYolu" class="img-full m-b">
+                                </div>
+                                <div class="col-sm-7">
+                                    @if (Model != null)
+                                    {
+                                        <h2 class="m-t-none text-black">@Model.Sarkilar.Baslik</h2>
+                                    }
+                                    <div class="clearfix m-b-lg">
+                                       
+                                        <div class="clear">
+                                            <a href="#" class="text-info">@(Model.Uyeler.Ad + " " + Model.Uyeler.Soyad)</a>
+                                        </div>
+                                    </div>
+                                    <div class="m-b-lg">
+                                        <a class="btn btn-default" data-toggle="button">
+                                            <i class="fa fa-heart-o text"></i>
+                                            <i class="fa fa-heart text-active text-danger"></i>
+                                        </a>
+
+                                        <a href="#" class="btn btn-default" data-toggle="modal" data-target="#Credits">Katkıda Bulunanlar</a>
+
+                                        <div class="modal fade" id="Credits" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                            <div class="modal-dialog hepsiniortala">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Kapat</span></button>
+                                                        <h3 class="modal-title" id="lineModalLabel">Katkıda Bulunanlar</h3>
+                                                    </div>
+                                                    <div class="modal-body ortalama">
+                                                        <h4>
+                                                            @using (var db = new DatabaseContext())
+                                                            {
+                                                                Model.PaylasilanTextList = db.PaylasilanTextler.Where(x => x.SarkiId == Model.Sarkilar.SarkiId).ToList();
+                                                                foreach (var item in Model.PaylasilanTextList)
+                                                                {
+                                                                    Uye u = db.Uyeler.Where(x => x.UyeId == item.UyeId).FirstOrDefault();
+                                                                    <a href="#">@(u.Ad+" "+u.Soyad)</a><br /><br />
+                                                                }
+                                                            }
+                                                        </h4>
+
+
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div>
+                                        Etiketler:
+                                        @foreach (var item in Model.HashTagList)
+                                        {
+                                            <a href="#" class="badge bg-light">@item.HashTagIcerik</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            @if (!Model.Sarkilar.TamamlandiMi)
+                            {
+                                <div class="m-t">
+                                    <i>   <p>Bu Lyrex'in tamamlanma durumu:</p></i>
+                                </div>
+                                <div class="progress progress-sm progress-striped  active">
+                                    @{
+                                        int oran = @Model.PaylasilanTextList.Count * 10;
+                                        <div class="progress-bar bg-info lter" data-toggle="tooltip" data-original-title="@oran%" style="width: @oran%"></div>
+                                    }
+                                </div>
+                                        }
+                            <h4 class="m-t-lg m-b" style="text-align:center;">ŞARKI SÖZLERİ</h4>
+                            <ul class="list-group list-group-lg">
+
+
+
+
+
+
+
+                                <li class="list-group-item">
+                                    <div class="pull-right m-l">
+
+                                    </div>
+                                    <div style="text-align:center;">
+                                        @foreach (var item in Model.PaylasilanTextList)
+                                        {
+
+                                            <hr class="hr-class" /> <input class="form-control lyrics-ortala" type="text" placeholder="@item.TextIcerik" disabled="">
+
+                                        }
+
+
+                                        @if (!Model.Sarkilar.TamamlandiMi)
+                                        {
+                                            <hr />
+                                            using (Html.BeginForm())
+                                            {
+                                                @Html.TextAreaFor(model => (model.PaylasilanTextler.TextIcerik),
+                                 new
+                                 {
+                                     @class = "form-control lyrics-ortala",
+                                     placeholder = "Kendi Lyrex'inizi ekleyin",
+                                     maxlength = "150"
+                                 })
+                                                <br />
+                                                <button type="submit" value="Icerik" class="btn btn-success saveclass">Lyrex'ini kaydet</button>
+                                            }
+                                        }
+
+                                        @*<input type="text" class="form-control lyrics-ortala" placeholder="Input your lyrics here.">*@
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                </li>
+                            </ul>
+                            <h4 class="m-t-lg m-b">@Model.YorumList.Count Yorum</h4>
+                            @foreach (var item in Model.YorumList)
+                            {
+                               
+                                <section class="comment-list block">
+                                    <article id="comment-id-1" class="comment-item">
+                                        @using (var db = new DatabaseContext())
+                                        {
+                                            Uye uye = new Uye();
+                                            uye = db.Uyeler.Where(x => x.UyeId == item.UyeId).FirstOrDefault();
+                                            UyeResim uyeResim = new UyeResim();
+                                            if (db.UyeResimleri.Where(x => x.UyeId == item.UyeId).FirstOrDefault() != null)
+                                            {
+                                                uyeResim = db.UyeResimleri.Where(x => x.UyeId == item.UyeId).FirstOrDefault();
+                                            }
+                                                <a class="pull-left thumb-sm">
+                                                    <img src="@uyeResim.UyeResimYolu" class="img-circle">
+                                                </a>
+                                            
+
+                                            <section class="comment-body m-b">
+                                                <header>
+
+                                                    <a href="#"><strong>@(uye.Ad + " " + uye.Soyad)</strong></a>
+
+
+
+                                                    <span class="text-muted text-xs block m-t-xs">
+                                                        @item.YorumTarihi
+                                                    </span>
+                                                </header>
+                                                <div class="m-t-sm">@item.YorumIcerik</div>
+                                            </section>
+                                        }
+
+                                    </article>
+                                    <!-- .comment-reply -->
+                                    <!-- / .comment-reply -->
+                                    @*<article id="comment-id-2" class="comment-item">
+                                    <a class="pull-left thumb-sm">
+                                        <img src="Assets/images/a2.png" class="img-circle">
+                                    </a>
+                                    <section class="comment-body m-b">
+                                        <header>
+                                            <a href="#"><strong>John smith</strong></a>
+                                            <label class="label bg-dark m-l-xs">Admin</label>
+                                            <span class="text-muted text-xs block m-t-xs">
+                                                26 minutes ago
+                                            </span>
+                                        </header>
+                                        <blockquote class="m-t">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                                            <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
+                                        </blockquote>
+                                        <div class="m-t-sm">Lorem ipsum dolor sit amet, consecteter adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet.</div>
+                                    </section>
+                                </article>*@
+                                </section>
+                            }
+                            <h4 class="m-t-lg m-b">Bir yorum bırak</h4>
+                            @using (Html.BeginForm())
+                            {
+
+                                <div class="form-group">
+                                    <label>Yorum</label>
+                                    @Html.TextAreaFor(model => model.Yorum.YorumIcerik,
+        new { @class = "form-control", placeholder = "Yorumunuzu ekleyin   " })
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" value="Yorum" class="btn btn-success">Yorumu gönder</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+
+                        <div class="panel wrapper-lg">
+                            <div class="row row-sm">
+                                <div class=" col-sm-12 col-xs-12">
+                                    <h2 class="m-t-none text-black">Bunlara da gözat!</h2>
+
+                                </div>
+                                @for (int i = 10; i < 19; i++)
+                                {
+                                    string resim = "m" + i + ".jpg"; 
+                                    <div class="col-xs-12 col-sm-6">
+                                        <div class="item">
+                                            <div class="pos-rlt">
+                                                <div class="item-overlay opacity r r-2x bg-black">
+                                                    <div class="center text-center m-t-n">
+                                                        <a href="#"><i class="fa fa-play-circle i-2x"></i></a>
+                                                    </div>
+                                                </div>
+                                                <a href="#"><img src="~/Content/Main/images/@resim" alt="" class="r r-2x img-full"></a>
+                                            </div>
+                                            <div class="padder-v">
+                                                <a href="#" class="text-ellipsis">Spring rain</a>
+                                                <a href="#" class="text-ellipsis text-xs text-muted">Miaow</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </section>
+    </section>
+</section>

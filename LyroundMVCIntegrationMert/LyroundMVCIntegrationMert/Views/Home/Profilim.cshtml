@@ -1,0 +1,132 @@
+﻿@using LyroundMVCIntegrationMert.ViewModels
+@using LyroundMVCIntegrationMert.Models.Managers
+@using LyroundMVCIntegrationMert.Models
+@using LyroundMVCIntegrationMert.Models
+@model SarkiEkleViewModel
+@{
+    ViewBag.Title = "Profilim";
+    Layout = "~/Views/Shared/LayoutPageAnaSayfa.cshtml";
+}
+
+<style>
+    .ortalama {
+        margin-top: 75px;
+    }
+</style>
+
+<section class="vbox">
+    <section class="scrollable">
+        <section class="hbox stretch">
+            <aside class="aside-lg bg-light lter b-r">
+                <section class="vbox">
+                    <section class="scrollable height-left-profile">
+                        <div class="wrapper ortalama">
+                            <div class="text-center m-b m-t">
+                                <a href="#" class="thumb-lg">
+                                    @using (var db = new DatabaseContext())
+                                    {
+                                        if (db.UyeResimleri.Where(x => x.UyeId == Model.Uyeler.UyeId).FirstOrDefault() != null)
+                                        {
+                                            UyeResim uyeResim = db.UyeResimleri.Where(x => x.UyeId == Model.Uyeler.UyeId).FirstOrDefault();
+                                            <img src="@uyeResim.UyeResimYolu" alt="...">
+                                        }
+                                        else
+                                        {
+                                            <img src="/UploadImages/avatar.png" alt="...">
+                                        }
+                                        
+                                    }
+                                   
+                                </a>
+                                <div>
+                                    <div class="h3 m-t-xs m-b-xs">@(Model.Uyeler.Ad +" "+Model.Uyeler.Soyad)</div>
+                                    <i>@Model.Uyeler.UyeOlmaTarihi</i>
+                                    
+                                    </div>
+                            </div>
+                            <div class="panel wrapper">
+                                <div class="row text-center">
+                                    <div class="col-xs-6">
+                                        <a href="#">
+                                            
+                                            <span class="m-b-xs h4 block">@Model.ArkadasList.Count</span>
+                                            <small class="text-muted">Arkadaş</small>
+                                        </a>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <a href="#">
+                                            <span class="m-b-xs h4 block">@Model.PaylasilanTextList.Count</span>
+                                            <small class="text-muted">Lyrex</small>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btn-group btn-group-justified m-b">
+
+                                <a onclick="location.href='@Url.Action("ProfilDuzenle","Home")'" class="btn btn-dark btn-rounded">
+                                    <i class="fa fa-cog"></i> Profilini Düzenle
+                                </a>
+                            </div>
+                           
+                        </div>
+                    </section>
+                </section>
+            </aside>
+            <aside class="bg-white">
+                <section class="vbox">
+                    <header class="header bg-light lt">
+                        <ul class="nav nav-tabs nav-white">
+                            <li class="active">
+                                <a href="#activity" data-toggle="tab">
+                                    Lyrex Geçmişi
+                                </a>
+                            </li>
+
+                        </ul>
+                    </header>
+                    <section class="scrollable height-profile">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="activity">
+                                <ul class="list-group no-radius m-b-none m-t-n-xxs list-group-lg no-border">
+                                    @using (var db = new DatabaseContext())
+                                    {
+                                        List<PaylasilanText> p = db.PaylasilanTextler.Where(x => x.UyeId == Model.Uyeler.UyeId).ToList();
+                                        foreach (var item in p)
+                                        {
+                                            Sarki s = db.Sarkilar.Where(x => x.SarkiId == item.SarkiId).FirstOrDefault();
+                                            SarkiResim sResim = db.SarkiResimler.Where(x => x.SarkiId == item.SarkiId).FirstOrDefault();
+                                            Uye u = db.Uyeler.Where(x => x.UyeId == item.UyeId).FirstOrDefault();
+                                            <li class="list-group-item">
+                                                
+                                                <a href="#" class="clear">
+                                                    <small class="pull-right">@s.Baslik</small>
+                                                    <strong class="block">@(u.Ad+" "+u.Soyad)</strong>
+                                                    <small>@item.TextIcerik </small>
+                                                </a>
+                                            </li>
+
+
+                                        }
+
+                                    }
+
+
+                                </ul>
+                            </div>
+                            <div class="tab-pane" id="events">
+                                <div class="text-center wrapper">
+                                    <i class="fa fa-spinner fa fa-spin fa fa-large"></i>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="interaction">
+                                <div class="text-center wrapper">
+                                    <i class="fa fa-spinner fa fa-spin fa fa-large"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </aside>
+        </section>
+    </section>
+</section>

@@ -1,0 +1,88 @@
+﻿@using LyroundMVCIntegrationMert.ViewModels
+@using LyroundMVCIntegrationMert.Models.Managers
+@using LyroundMVCIntegrationMert.Models
+@model SarkiEkleViewModel
+
+@{
+    ViewBag.Title = "ProfilDuzenle";
+    Layout = "~/Views/Shared/LayoutPageAnaSayfa.cshtml";
+}
+
+
+<style>
+    .dosyasec-boyut {
+        width: 82%;
+    }
+</style>
+<section class="vbox">
+    <section class="scrollable">
+        <section class="hbox stretch">
+            <aside class="bg-white">
+                <section class="vbox">
+                    <header class="header bg-light lt">
+                        <ul class="nav nav-tabs nav-white">
+                            <li class="active"><a href="#activity" style="background-color: #edf2f3;" data-toggle="tab">Profilinizi Düzenleyin</a></li>
+
+
+
+                        </ul>
+                    </header>
+                    <section class="scrollable height-profile">
+
+                        <div class="container">
+                            <div class="col-md-6">
+                                <div class="panel-body">
+
+                                    @using (Html.BeginForm("ProfilDuzenle", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                    {
+                                    <div role="form">
+                                        <div class="form-group">
+                                            <label>Kullanıcı adınız</label>
+                                            <input class="form-control" type="text" placeholder="@Model.Uyeler.KullaniciAdi" disabled="">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>E-posta adresiniz</label>
+                                            <input class="form-control" type="text" placeholder="@Model.Uyeler.EMail" disabled="">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Ad</label>
+                                            @Html.TextBoxFor(model => model.Uyeler.Ad, new { @class = "form-control", placeholder = "" })
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Soyad</label>
+                                            @Html.TextBoxFor(model => model.Uyeler.Soyad, new { @class = "form-control", placeholder = "" })
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label>Şifrenizi Değiştirin</label>
+                                            @Html.TextBoxFor(model => model.Uyeler.Sifre, new { @class = "form-control", placeholder = "" })
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label for="exampleInputFile"><i>Yeni Profil Resmi </i></label>
+                                                <input type="file" name="ImageFile" id="ImageFile" class="form-control" />
+                                               
+
+                                                
+                                            </div>
+
+                                        </div>
+                                        <button type="submit" class="btn btn-s-md btn-success">Kaydet</button>
+                                        
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </aside>
+        </section>
+    </section>
+</section>

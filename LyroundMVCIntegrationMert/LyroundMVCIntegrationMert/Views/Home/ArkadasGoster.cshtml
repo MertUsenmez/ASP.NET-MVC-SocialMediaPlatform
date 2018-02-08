@@ -1,0 +1,47 @@
+﻿@model LyroundMVCIntegrationMert.ViewModels.SarkiEkleViewModel
+
+@{
+    ViewBag.Title = "ArkadasGoster";
+    Layout = "~/Views/Shared/LayoutPageAnaSayfa.cshtml";
+}
+
+
+
+
+<section class="hbox stretch">
+    <section>
+        <section class="vbox">
+            <section class="scrollable padder-lg w-f-md height-index" id="bjax-target">
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <h2 class="font-thin m-b" style="font-size:29px;">Bulunan Sonuçlar</h2>
+                    </div>
+                </div>
+                <div class="row row-sm"></div>
+                <div class="list-group">
+                    @foreach (var item in Model.UyelerList)
+                    {
+                        if(item.KullaniciAdi!= Session["kullaniciAdi"].ToString()) { 
+                        <a href="/Home/Profil/@item.UyeId" class="list-group-item">@(item.Ad+" "+item.Soyad)</a>
+                        }
+                    }
+                    
+                </div>
+
+            </section>
+
+        </section>
+    </section>
+
+</section>
+
+
+
+
+
+
+
+
+
+  

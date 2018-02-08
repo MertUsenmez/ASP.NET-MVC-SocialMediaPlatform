@@ -1,0 +1,145 @@
+﻿@using LyroundMVCIntegrationMert.ViewModels
+@using LyroundMVCIntegrationMert.Models
+@model UyeOlViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8" />
+    <title>Lyround | Kayıt Ol</title>
+    <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <!-- type="text/css"  -->
+
+
+    <link href="~/Scripts/jplayer.flat.css" rel="stylesheet" />
+    <link href="~/Content/Main/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/Main/animate.css" rel="stylesheet" />
+    <link href="~/Content/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/Main/simple-line-icons.css" rel="stylesheet" />
+    <link href="~/Content/Main/font.css" rel="stylesheet" />
+    <link href="~/Content/Main/app.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/app.js"></script>
+    <script src="~/Scripts/jquery.slimscroll.min.js"></script>
+    <script src="~/Scripts/app.plugin.js"></script>
+    <script src="~/Scripts/jquery.jplayer.min.js"></script>
+    <script src="~/Scripts/jplayer.playlist.min.js"></script>
+    <script src="~/Scripts/demo.js"></script>
+
+    <style>
+        html {
+            background-color: #2ea0b6;
+        }
+
+        .mert {
+            width: 100%;
+        }
+
+        .OrtalaKayit {
+            text-align: center;
+            margin-top: 5px;
+        }
+    </style>
+
+</head>
+
+
+<body class="bg-info dker mert">
+
+    <div class="row">
+
+        <section id="content" class="m-t-lg wrapper-md animated fadeInDown">
+            <div class="container aside-xl">
+                <a class="navbar-brand block" href="~/Views/Home/Index.cshtml"><span class="h1 font-bold">LYROUND</span></a>
+
+                <section class="m-b-lg">
+                    @*<form action="~/Views/Home/Index.cshtml">*@
+                    <!-- Kaldırılacak -->
+                    @using (Html.BeginForm())
+                    {
+                        <div class="form-group">
+                            @Html.TextBoxFor(model => model.KullaniciAdi, new
+                       {
+                           @class = "form-control rounded input-lg text-center no-border block",
+                           placeholder = "Kullanıcı Adınız"
+                       })
+
+                            @Html.ValidationMessageFor(model => model.KullaniciAdi, "", new { @class = "text-danger block OrtalaKayit" })
+                            @*<input placeholder="Name" class="form-control rounded input-lg text-center no-border" />*@
+                        </div>
+
+
+                        <div class="form-group">
+
+
+                            @Html.TextBoxFor(model => model.Sifre, new
+                       {
+                           @class = "form-control rounded input-lg text-center no-border",
+                           placeholder = "Şifreniz",
+                           type = "password"
+                       })
+                            @*@Html.EditorFor(model => model.Sifre, new { htmlAttributes = new { @class = "form-control" } })*@
+                            @Html.ValidationMessageFor(model => model.Sifre, "", new { @class = "text-danger block OrtalaKayit" })
+
+                            @*<input type="email" placeholder="Email" class="form-control rounded input-lg text-center no-border" />*@
+                        </div>
+                        <div class="form-group">
+
+
+                            @Html.TextBoxFor(model => model.EMail, new
+                       {
+                           @class = "form-control rounded input-lg text-center no-border",
+                           placeholder = "E-Mail Adresiniz"
+                       })
+                            @*@Html.EditorFor(model => model.EMail, new { htmlAttributes = new { @class = "form-control" } })*@
+                            @Html.ValidationMessageFor(model => model.EMail, "", new { @class = "text-danger block OrtalaKayit" })
+                            @*<input type="password" placeholder="Password" class="form-control rounded input-lg text-center no-border">*@
+                        </div>
+
+                        <div class="form-group">
+
+                            @Html.TextBoxFor(model => model.Ad, new
+                       {
+                           @class = "form-control rounded input-lg text-center no-border",
+                           placeholder = "Adınız"
+                       })
+                            @*@Html.EditorFor(model => model.Ad, new { htmlAttributes = new { @class = "form-control" } })*@
+                            @Html.ValidationMessageFor(model => model.Ad, "", new { @class = "text-danger block OrtalaKayit" })
+                        </div>
+                        <div class="form-group">
+
+                            @Html.TextBoxFor(model => model.Soyad, new
+                       {
+                           @class = "form-control rounded input-lg text-center no-border",
+                           placeholder = "Soyadınız"
+                       })
+
+                            @Html.ValidationMessageFor(model => model.Soyad, "", new { @class = "text-danger block OrtalaKayit" })
+                        </div>
+                        <button type="submit" class="btn btn-lg btn-warning lt b-white b-2x btn-block btn-rounded"><i class="icon-arrow-right pull-right"></i><span class="m-r-n-lg">Kaydol</span></button>
+                        <br />
+                        <a href="GirisYap" class="btn btn-lg btn-info btn-block btn-rounded">Giriş Yap</a>
+                    }
+                    @*</form>*@
+                </section>
+            </div>
+        </section>
+        <!-- footer -->
+        <footer id="footer">
+            <div class="text-center padder clearfix">
+                <p>
+                    <small>İçeriklerin izinsiz kopyalanması yasaktır. <br />Lyround&copy; 2017</small>
+                </p>
+            </div>
+        </footer>
+        <!-- / footer -->
+    </div>
+</body>
+</html>

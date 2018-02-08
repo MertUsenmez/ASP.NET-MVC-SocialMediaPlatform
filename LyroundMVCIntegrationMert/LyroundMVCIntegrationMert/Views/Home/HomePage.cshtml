@@ -1,0 +1,238 @@
+﻿@using LyroundMVCIntegrationMert.ViewModels
+@using LyroundMVCIntegrationMert.Models.Managers
+@using LyroundMVCIntegrationMert.Models
+@model SarkiEkleViewModel
+
+
+@{
+    ViewBag.Title = "HomePage";
+    Layout = "~/Views/Shared/LayoutPageAnaSayfa.cshtml";
+}
+
+<style>
+    .hr-class {
+        visibility: hidden;
+        margin-bottom: -18px;
+    }
+
+    .modal-border-disable {
+        border-radius: 0px;
+    }
+</style>
+<section class="hbox stretch">
+    <section>
+        <section class="vbox">
+            <section class="scrollable padder-lg w-f-md height-index" id="bjax-target">
+                <div class="row">
+                    <div class="col-md-4">
+                        @if (Session["durum"] == null)
+                        {
+                            <h2 class="font-thin m-b" style="font-size:29px;">Tüm Lyrexler</h2>
+                        }
+                        else{
+                        if (Session["durum"].ToString() == "Tamamlanmis")
+                        {
+                            <h2 class="font-thin m-b" style="font-size:29px;">Tamamlanmis Lyrexler</h2>
+                        }
+                        else if (Session["durum"].ToString() == "Tamamlanmamis")
+                        {
+                            <h2 class="font-thin m-b" style="font-size:29px;">Tamamlanmamis Lyrexler</h2>
+                        }
+                        else if (Session["durum"].ToString() == "Hepsi")
+                        {
+                            <h2 class="font-thin m-b" style="font-size:29px;">Tüm Lyrexler</h2>
+                        }
+                        }
+                    </div>
+
+                    <div class="col-md-4" style="margin-top: 18px;">
+
+                        <div class="btn-group" data-toggle="buttons">
+                            <label onclick="location.href='@Url.Action("Tamamlanmis", "Home")'" class="btn btn-sm btn-default">
+                                <input type="radio" name="options">Tamamlanmış
+                            </label>
+                            <label onclick="location.href='@Url.Action("Tamamlanmamis", "Home")'" class="btn btn-sm btn-default">
+                                <input type="radio" name="options">Tamamlanmamış
+                            </label>
+                        </div>
+
+                        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal">Yeni Lyrex Ekle</button>
+
+                        <!-- line modal -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content modal-border-disable">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Kapat</span></button>
+                                        <h3 class="modal-title" id="lineModalLabel">Yeni Lyrex Ekle</h3>
+                                    </div>
+
+                                    @using (Html.BeginForm("HomePage", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                    {
+                                        <div class="modal-body">
+                                            <div>
+
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Lyrex Başlığınız</label>
+                                                    @Html.TextBoxFor(model => model.Sarkilar.Baslik, new
+                                               {
+                                                   @class = "form-control",
+                                                   placeholder = "Lyrex'inize ait belirlediğiniz başlığı giriniz"
+                                               })
+                                                    @*<input type="text" class="form-control" id="exampleInputEmail1" placeholder="Lyrex'inize ait belirlediğiniz başlığı giriniz">*@
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="exampleInputPassword1">Etiketleriniz</label>
+                                                    @Html.TextBoxFor(model => model.HashTagler.HashTagIcerik,
+        new { @class = "form-control", placeholder = "En fazla 4 adet olmak üzere Lyrexinizi en iyi anlatan etiketleri giriniz..." })
+                                                    @*<input type="text" class="form-control" id="exampleInputPassword1" placeholder="En fazla 4 adet olmak üzere Lyrexinizi en iyi anlatan etiketleri giriniz...">*@
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="exampleInputPassword1">Başlayın!</label>
+                                                    @Html.TextBoxFor(model => model.PaylasilanTextler.TextIcerik,
+        new
+        {
+            @class = "form-control",
+            placeholder = "İlk iki satırınızı yazarak diğerlerine ilham kaynağı olun",
+            maxlength = "75"
+        })
+                                                    @*<textarea class="form-control" rows="3" id="exampleInputLyrex1" placeholder="İlk satırınızı yazarak diğerlerine ilham kaynağı olun" required></textarea>*@
+
+
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="exampleInputFile"><i>Lyrex'iniz için bir kapak görseli belirleyiniz: </i></label>
+                                                    <input type="file" name="ImageFile" id="ImageFile" class="form-control" />
+                                                    @*@Html.TextBoxFor(model => model.SarkiResimleri.SarkiResimYolu,new { Name="resimDosyasi" ,id="resimDosyasi", type = "file"  })*@
+                                                    @*<input type="file" id="exampleInputFile">*@
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal" role="button">Kapat</button>
+                                                </div>
+                                                <div class="btn-group btn-delete hidden" role="group">
+                                                    <button type="button" id="delImage" class="btn btn-default btn-hover-red" data-dismiss="modal" role="button">Sil</button>
+                                                </div>
+                                                <div class="btn-group" role="group">
+                                                    <button type="submit" id="saveImage" class="btn btn-default btn-hover-green" data-action="save" role="button">Kaydet</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" style="margin-top: 18px;">
+                        <div class="form-group">
+                            <div class="input-group">
+
+                              <input type="text" class = "form-control input-sm no-border rounded" placeholder = "Etiket ile Lyrex arat.." />
+                                    <button type="button" class="btn btn-sm bg-white btn-icon rounded"><i class="fa fa-search"></i></button>
+                                
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row row-sm">
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model.SarkilarList)
+                        {
+                            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="item">
+                                    <div class="pos-rlt">
+                                        <div class="bottom">
+                                            <span class="badge bg-info m-l-sm m-b-sm">03:20</span>
+                                        </div>
+                                        <div class="item-overlay opacity r r-2x bg-black">
+                                            <div class="text-info padder m-t-sm text-sm">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star-o text-muted"></i>
+                                            </div>
+                                            <div class="center text-center m-t-n">
+                                                <a href="/Home/SarkiyaEklemeIslemiYap/@item.SarkiId"><i class="icon-control-play i-2x"></i></a>
+                                            </div>
+                                            <div class="bottom padder m-b-sm">
+                                                <a href="#" class="pull-right">
+                                                    <i class="fa fa-heart-o"></i>
+                                                </a>
+                                                <a href="#">
+                                                    <i class="fa fa-plus-circle"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        @using (var db = new DatabaseContext())
+                                        {
+                                            SarkiResim sarkiResmi = db.SarkiResimler.Where(x => x.SarkiId == item.SarkiId).FirstOrDefault();
+                                            string resimYolu = sarkiResmi.SarkiResimYolu;
+                                            <a href="#"><img src="@resimYolu" style="height:221px; width:148px;" alt="" class="r r-2x img-full"></a>
+                                        }
+
+
+                                    </div>
+
+
+                                    <div class="padder-v">
+                                        <a href="#" class="text-ellipsis">@item.Baslik</a>
+                                        @{
+                                            using (var context = new DatabaseContext())
+                                            {
+                                                var query = context.Uyeler.Where(x => x.UyeId == item.UyeId);
+                                                foreach (var i in query)
+                                                {
+                                                    <a href="#" class="text-ellipsis text-xs text-muted">@(i.Ad + " " + i.Soyad)</a>
+                                                }
+                                            }
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+
+                                                }
+                                            }
+
+                </div>
+
+                <div class="row m-t-lg m-b-lg">
+                    <div class="col-sm-6">
+                        <div class="bg-primary wrapper-md r">
+                            <a href="#">
+                                <span class="h4 m-b-xs block"><i class=" icon-user-follow i-lg"></i> Giriş yap veya kayıt ol</span>
+                                <span class="text-muted">Arkadaşlarınla Lyrexlerini paylaşmak için Facebook hesabından giriş yap.</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="bg-black wrapper-md r">
+                            <a href="#">
+                                <span class="h4 m-b-xs block"><i class="icon-cloud-download i-lg"></i> Uygulamamızı indirin</span>
+                                <span class="text-muted">Mobil ve masaüstü için uygulamamızı indirerek Lyround'a her yerden erişin.</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </section>
+    </section>
+</section>
