@@ -1,0 +1,2 @@
+# ASP.NET-MVC-SocialMediaPlatform
+We have developed a social media platform with Scrum metadology. We made Daily Scrums and set priorities. We have not set specific dates for our Daily Scrums. At the beginning of the project, we made the canvas business model of this project. We then made a requirement analysis and started to develop the project. The technologies we use are Asp.Net MVC, Entity Framework (code first), Microsoft SQL Server, Bootsrap, JQuery.
